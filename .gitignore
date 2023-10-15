@@ -1,0 +1,6 @@
+__pycache__
+/build
+/dist
+/leep.egg-info
+/setup.py
+/leep/extension.cpython*
