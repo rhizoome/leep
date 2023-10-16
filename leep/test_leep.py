@@ -1,4 +1,5 @@
-from leep.extension import path_expr as path_expr_c
+from leep.extension import get as get_c
+from leep.extension import set as set_c
 from timeit import timeit
 from collections.abc import Sequence
 
@@ -8,17 +9,22 @@ _a = {"key": _b}
 _p = "key.0.4"
 
 
-def access_c():
-    assert path_expr_c(_a, _p.replace(".", "\0")) == 42
+def call_set_c():
+    set_c(_a, _p, 3)
+    assert get_c(_a, _p) == 3
 
 
-def access_py():
-    assert path_expr_py(_a, _p.replace(".", "\0")) == 42
+def call_get_c():
+    assert get_c(_a, _p) == 3
 
 
-def path_expr_py(obj, path):
+def call_get_py():
+    assert get_py(_a, _p) == 3
+
+
+def get_py(obj, path, delim="."):
     result = obj
-    for part in path.split("\0"):
+    for part in path.split(delim):
         if isinstance(result, Sequence):
             result = result[int(part)]
         else:
@@ -30,5 +36,8 @@ def path_expr_py(obj, path):
 
 
 def test_leep():
-    print(timeit(access_c))
-    print(timeit(access_py))
+    # call_set_c()
+    # call_get_c()
+    print(timeit(call_set_c))
+    print(timeit(call_get_c))
+    print(timeit(call_get_py))
